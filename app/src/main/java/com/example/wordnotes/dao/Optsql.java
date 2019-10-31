@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
+
 public class Optsql {
 
     private MydatabaseHelper dbHelper;
@@ -84,24 +86,36 @@ public class Optsql {
      * @param fuzzyword
      * @return
      */
-    public String[][] selectFuzzy(String fuzzyword) {
-        String[][] result = new String[10][2];
-        try {
-            Cursor cursor = db.query("Notebook", new String[]{"word", "translation", "example"}, "word=?", new String[]{fuzzyword}, null, null, null);
+    public ArrayList<String[]> selectFuzzy(String fuzzyword) {
+
+        ArrayList<String[]> arrayList=new ArrayList<>();
+//        try {
+            Cursor cursor = db.query("Notebook", new String[]{"word", "translation", "example"}, "word"+" LIKE ? ",
+                    new String[] { "%" + fuzzyword + "%" }, null, null, null);
             int i = 0;
             while (cursor.moveToNext()) {
-                result[i][0] = cursor.getString(cursor.getColumnIndex("word"));
-                result[i][1] = cursor.getString(cursor.getColumnIndex("translation"));
-                result[i][2] = cursor.getString(cursor.getColumnIndex("example"));
+                String[] result = new String[3];
+                if(i==10){
+                    break;
+                }
+                result[0] = cursor.getString(cursor.getColumnIndex("word"));
+                result[1] = cursor.getString(cursor.getColumnIndex("translation"));
+                result[2] = cursor.getString(cursor.getColumnIndex("example"));
+                System.out.println(result[0]+"\n"+result[1]+"\n"+result[2]+"\n");
+                arrayList.add(result);
                 i++;
+
+
             }
+
             cursor.close();
             System.out.println("Sql Fuzzy Select Successful ! ");
 
-            return result;
-        } catch (Exception e) {
-            System.out.println("ERROR : Sql Fuzzy Select Failed ");
-            return null;
-        }
+            return arrayList;
+//        } catch (Exception e) {
+//            System.out.println("ERROR : Sql Fuzzy Select Failed ");
+//            return null;
+//        }
     }
+
 }

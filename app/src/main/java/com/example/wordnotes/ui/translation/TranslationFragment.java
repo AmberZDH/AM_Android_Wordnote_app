@@ -78,29 +78,32 @@ public class TranslationFragment extends Fragment implements View.OnClickListene
                 getWordShowThread();
 
                 //如果单词存入了单词本，收藏On
-                if (optsql.selectValues(input_textview.getText().toString()) == null){
+                if (optsql.selectValues(input_textview.getText().toString()) != null){
                     bt2.setBackgroundResource(R.drawable.star_on);
                     break;
                 }
 
 
                 if (fanyi == "该词语未查询到翻译") {
-                    bt2.setBackgroundResource(R.drawable.star_on);
+                    bt2.setBackgroundResource(R.drawable.star_off);
                     break;
                 }
                 bt2.setBackgroundResource(R.drawable.star_off);
                 break;
 
+            //收藏
             case R.id.button_collection:
                 if (input_textview.getText().toString().equals(null) || fanyi == "该词语未查询到翻译") {
+                    bt2.setBackgroundResource(R.drawable.star_off);
                     break;
                 }
                 if (optsql.selectValues(input_textview.getText().toString())==null) {
+                    bt2.setBackgroundResource(R.drawable.star_on);
                     break;
                 }
                 optsql.insertValues(input_textview.getText().toString(), fanyi, sentence);
 
-//                bt2.setBackgroundResource(R.drawable.star_on);
+                bt2.setBackgroundResource(R.drawable.star_on);
                 fanyi = null;
                 phrase = null;
                 sentence = null;
