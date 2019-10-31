@@ -31,6 +31,7 @@ public class CollectionFragment extends Fragment implements View.OnClickListener
 
 
     RecyclerView recyclerView;
+    WordAdapter wordAdapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -74,7 +75,7 @@ public class CollectionFragment extends Fragment implements View.OnClickListener
                 System.out.println("\nokokkokokkkokokokokokokkokkokokokok\n");
                 this.input_word = input_textView.getText().toString();
                 System.out.println(input_word + "\n");
-                WordAdapter wordAdapter =new WordAdapter(getFuzzy(input_word));
+                 wordAdapter =new WordAdapter(getFuzzy(input_word));
                 recyclerView.setAdapter(wordAdapter);
 
                 break;
@@ -85,6 +86,7 @@ public class CollectionFragment extends Fragment implements View.OnClickListener
 
 
     public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> {
+
         private ArrayList<String[]> mWordlist;
 
         class ViewHolder extends RecyclerView.ViewHolder {
@@ -106,18 +108,21 @@ public class CollectionFragment extends Fragment implements View.OnClickListener
         @NonNull
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list, parent, false);
+            View view = LayoutInflater.from(getContext()).inflate(R.layout.list, parent, false);
             ViewHolder holder = new ViewHolder(view);
             return holder;
         }
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            holder.wordText.setText(mWordlist.get(position)[0]);
+            System.out.println("position: "+position);
+            String[] word =mWordlist.get(position);
+            holder.wordText.setText(word[0]+"     "+word[1].replace(" ",""));
         }
 
         @Override
         public int getItemCount() {
+            System.out.println(mWordlist.size());
             return mWordlist.size();
         }
     }

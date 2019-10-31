@@ -11,10 +11,16 @@ import java.util.ArrayList;
 
 public class Optsql {
 
+    /**
+     * 数据库操作
+     */
+
     private MydatabaseHelper dbHelper;
     private SQLiteDatabase db;
 
     /**
+     * 构造函数用于同android数据库操作的接口统一
+     *
      * @param context Context
      * @param name    String
      * @param factory SQLiteDatabase.CursorFactory
@@ -88,30 +94,30 @@ public class Optsql {
      */
     public ArrayList<String[]> selectFuzzy(String fuzzyword) {
 
-        ArrayList<String[]> arrayList=new ArrayList<>();
+        ArrayList<String[]> arrayList = new ArrayList<>();
 //        try {
-            Cursor cursor = db.query("Notebook", new String[]{"word", "translation", "example"}, "word"+" LIKE ? ",
-                    new String[] { "%" + fuzzyword + "%" }, null, null, null);
-            int i = 0;
-            while (cursor.moveToNext()) {
-                String[] result = new String[3];
-                if(i==10){
-                    break;
-                }
-                result[0] = cursor.getString(cursor.getColumnIndex("word"));
-                result[1] = cursor.getString(cursor.getColumnIndex("translation"));
-                result[2] = cursor.getString(cursor.getColumnIndex("example"));
-                System.out.println(result[0]+"\n"+result[1]+"\n"+result[2]+"\n");
-                arrayList.add(result);
-                i++;
-
-
+        Cursor cursor = db.query("Notebook", new String[]{"word", "translation", "example"}, "word" + " LIKE ? ",
+                new String[]{"%" + fuzzyword + "%"}, null, null, null);
+        int i = 0;
+        while (cursor.moveToNext()) {
+            String[] result = new String[3];
+            if (i == 10) {
+                break;
             }
+            result[0] = cursor.getString(cursor.getColumnIndex("word"));
+            result[1] = cursor.getString(cursor.getColumnIndex("translation"));
+            result[2] = cursor.getString(cursor.getColumnIndex("example"));
+            System.out.println(result[0] + "\n" + result[1] + "\n" + result[2] + "\n");
+            arrayList.add(result);
+            i++;
 
-            cursor.close();
-            System.out.println("Sql Fuzzy Select Successful ! ");
 
-            return arrayList;
+        }
+
+        cursor.close();
+        System.out.println("Sql Fuzzy Select Successful ! ");
+
+        return arrayList;
 //        } catch (Exception e) {
 //            System.out.println("ERROR : Sql Fuzzy Select Failed ");
 //            return null;

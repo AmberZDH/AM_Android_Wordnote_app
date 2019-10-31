@@ -93,14 +93,16 @@ public class TranslationFragment extends Fragment implements View.OnClickListene
 
             //收藏
             case R.id.button_collection:
-                if (input_textview.getText().toString().equals(null) || fanyi == "该词语未查询到翻译") {
+                //启动页无查询的时候 防止收藏
+                if (fanyi == "该词语未查询到翻译"||input_textview.getText().toString().equals(null)) {
                     bt2.setBackgroundResource(R.drawable.star_off);
                     break;
                 }
-                if (optsql.selectValues(input_textview.getText().toString())==null) {
-                    bt2.setBackgroundResource(R.drawable.star_on);
+                //数据库存在该单词时防止收藏
+                if (optsql.selectValues(input_textview.getText().toString()) != null){
                     break;
                 }
+
                 optsql.insertValues(input_textview.getText().toString(), fanyi, sentence);
 
                 bt2.setBackgroundResource(R.drawable.star_on);

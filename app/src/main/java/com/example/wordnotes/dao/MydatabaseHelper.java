@@ -1,14 +1,12 @@
 package com.example.wordnotes.dao;
 
 import android.content.Context;
-import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
-import com.example.wordnotes.ui.translation.TranslationFragment;
 
 public class MydatabaseHelper extends SQLiteOpenHelper {
 
@@ -24,8 +22,6 @@ public class MydatabaseHelper extends SQLiteOpenHelper {
         super(context, name, factory, version);
         mContext = context;
     }
-
-
 
 
     @Override
