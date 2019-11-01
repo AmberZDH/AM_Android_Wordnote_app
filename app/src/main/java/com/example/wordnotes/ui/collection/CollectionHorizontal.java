@@ -21,8 +21,10 @@ public class CollectionHorizontal extends Fragment implements View.OnClickListen
     
     private Optsql optsql;//连接数据库
     TextView input_textView;
+    public static TextView output_textView;
 
     ArrayList<String[]> result = new ArrayList<>();
+    String[] word =new String[3];
     String input_word;
 
 
@@ -44,6 +46,7 @@ public class CollectionHorizontal extends Fragment implements View.OnClickListen
 
         //注册 button 控件
         input_textView = root.findViewById(R.id.collection_input);
+        output_textView =root.findViewById(R.id.show_detail_horizontal);
         Button bt1 = root.findViewById(R.id.collection_button);
         bt1.setOnClickListener(this);
 
@@ -79,12 +82,12 @@ public class CollectionHorizontal extends Fragment implements View.OnClickListen
         private ArrayList<String[]> mWordlist;
 
         class ViewHolder extends RecyclerView.ViewHolder {
-            Button wordButton;
+            TextView wordText;
 
             public ViewHolder(@NonNull View view) {
                 super(view);
-                wordButton = view.findViewById(R.id.button_list);
-
+                wordText = view.findViewById(R.id.text_list);
+                wordText.setClickable(true);
 
             }
         }
@@ -105,8 +108,19 @@ public class CollectionHorizontal extends Fragment implements View.OnClickListen
         @Override
         public void onBindViewHolder(@NonNull CollectionHorizontal.WordAdapter.ViewHolder holder, int position) {
             System.out.println("position: "+position);
-            String[] word =mWordlist.get(position);
-            holder.wordButton.setText(word[0]);
+            word =mWordlist.get(position);
+            holder.wordText.setText(word[0]);
+            holder.wordText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    System.out.println("点击文本成功");
+                    System.out.println(word[0]);
+                    System.out.println(word[1]);
+                    System.out.println(word[2]);
+
+//                    output_textView.setText("【单词】\n"+word[0]+"\n【解释】\n"+word[1]+"\n【例句】\n"+word[2]);
+                }
+            });
         }
 
         @Override

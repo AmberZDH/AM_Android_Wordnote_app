@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Main2Activity">
+
     <fragment
         android:id="@+id/top_fragment"
         android:name="com.example.wordnotes.ui.collection.CollectionHorizontal"
@@ -16,6 +17,13 @@
         android:id="@+id/bottom_fragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="1" />
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/show_detail_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="20dp" />
+    </FrameLayout>
 
 </LinearLayout>
