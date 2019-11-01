@@ -24,6 +24,7 @@
             android:autoSizeMinTextSize="5dp"
             android:hint="请输入要翻译的内容"
             android:maxLines="1"
+            android:lines="1"
             android:textSize="25dp" />
 
         <Button
