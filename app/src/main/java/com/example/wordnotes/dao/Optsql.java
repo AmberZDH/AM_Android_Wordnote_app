@@ -95,33 +95,65 @@ public class Optsql {
     public ArrayList<String[]> selectFuzzy(String fuzzyword) {
 
         ArrayList<String[]> arrayList = new ArrayList<>();
-//        try {
-        Cursor cursor = db.query("Notebook", new String[]{"word", "translation", "example"}, "word" + " LIKE ? ",
-                new String[]{"%" + fuzzyword + "%"}, null, null, null);
-        int i = 0;
-        while (cursor.moveToNext()) {
-            String[] result = new String[3];
-            if (i == 10) {
-                break;
+        try {
+            Cursor cursor = db.query("Notebook", new String[]{"word", "translation", "example"}, "word" + " LIKE ? ",
+                    new String[]{"%" + fuzzyword + "%"}, null, null, null);
+            int i = 0;
+            while (cursor.moveToNext()) {
+                String[] result = new String[3];
+                if (i == 10) {
+                    break;
+                }
+                result[0] = cursor.getString(cursor.getColumnIndex("word"));
+                result[1] = cursor.getString(cursor.getColumnIndex("translation"));
+                result[2] = cursor.getString(cursor.getColumnIndex("example"));
+                System.out.println(result[0] + "\n" + result[1] + "\n" + result[2] + "\n");
+                arrayList.add(result);
+                i++;
+
+
             }
-            result[0] = cursor.getString(cursor.getColumnIndex("word"));
-            result[1] = cursor.getString(cursor.getColumnIndex("translation"));
-            result[2] = cursor.getString(cursor.getColumnIndex("example"));
-            System.out.println(result[0] + "\n" + result[1] + "\n" + result[2] + "\n");
-            arrayList.add(result);
-            i++;
 
+            cursor.close();
+            System.out.println("Sql Fuzzy Select Successful ! ");
 
+            return arrayList;
+        } catch (Exception e) {
+            System.out.println("ERROR : Sql Fuzzy Select Failed ");
+            return null;
         }
-
-        cursor.close();
-        System.out.println("Sql Fuzzy Select Successful ! ");
-
-        return arrayList;
-//        } catch (Exception e) {
-//            System.out.println("ERROR : Sql Fuzzy Select Failed ");
-//            return null;
-//        }
     }
+
+    /**
+     * 删除单词操作
+     *
+     * @param word
+     */
+    public void deleteValue(String word) {
+        try {
+            db.delete("Notebook", "word = ?", new String[]{word});
+            System.out.println("Delete " + word + " Successful !");
+        } catch (Exception e) {
+            System.out.println("ERROR : Sql delete " + word + "Failed ");
+        }
+    }
+
+    /**
+     * 更新单词翻译操作
+     *
+     * @param word
+     * @param newtranslation
+     */
+    public void updataValue(String word, String newtranslation) {
+        try {
+            ContentValues values = new ContentValues();
+            values.put("translation", newtranslation);
+            db.update("Notebook", values, "word = ?", new String[]{word});
+            System.out.println("Update  " + word + " Successful !");
+        } catch (Exception e) {
+            System.out.println("ERROR : Sql update " + word + "Failed ");
+        }
+    }
+
 
 }

@@ -83,11 +83,13 @@ public class CollectionHorizontal extends Fragment implements View.OnClickListen
 
         class ViewHolder extends RecyclerView.ViewHolder {
             TextView wordText;
+//            Button bt;
 
             public ViewHolder(@NonNull View view) {
                 super(view);
-                wordText = view.findViewById(R.id.text_list);
+                wordText = view.findViewById(R.id.text_list_horizontal);
                 wordText.setClickable(true);
+//                bt = view.findViewById(R.id.edit_list_button);
 
             }
         }
@@ -100,7 +102,7 @@ public class CollectionHorizontal extends Fragment implements View.OnClickListen
         @NonNull
         @Override
         public CollectionHorizontal.WordAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(getContext()).inflate(R.layout.list, parent, false);
+            View view = LayoutInflater.from(getContext()).inflate(R.layout.list_horizontal, parent, false);
             CollectionHorizontal.WordAdapter.ViewHolder holder = new CollectionHorizontal.WordAdapter.ViewHolder(view);
             return holder;
         }
