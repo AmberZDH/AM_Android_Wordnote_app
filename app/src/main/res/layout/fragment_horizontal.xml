@@ -27,8 +27,8 @@
                 android:autoSizeMaxTextSize="25dp"
                 android:autoSizeMinTextSize="5dp"
                 android:hint="请输入收藏的单词"
-                android:maxLines="1"
                 android:lines="1"
+                android:maxLines="1"
                 android:textSize="15dp" />
 
             <Button

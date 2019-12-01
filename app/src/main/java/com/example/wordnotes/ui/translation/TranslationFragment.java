@@ -1,7 +1,10 @@
 package com.example.wordnotes.ui.translation;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -9,7 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
@@ -17,9 +22,11 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.example.wordnotes.MainActivity;
 import com.example.wordnotes.R;
 import com.example.wordnotes.dao.MydatabaseHelper;
 import com.example.wordnotes.dao.Optsql;
+import com.example.wordnotes.utils.News_globaltimes;
 import com.example.wordnotes.utils.Translate;
 
 public class TranslationFragment extends Fragment implements View.OnClickListener {
@@ -29,8 +36,11 @@ public class TranslationFragment extends Fragment implements View.OnClickListene
     private Optsql optsql;
 //    private MydatabaseHelper dbHelper;
 
+    private AlertDialog.Builder builder;
+    private ProgressDialog progressDialog;
     Button bt1;
     Button bt2;
+    Button bt3;
     private String fanyi = null;
     private String phrase = null;
     private String sentence = null;
@@ -57,8 +67,11 @@ public class TranslationFragment extends Fragment implements View.OnClickListene
         System.out.println("HHHHHHHHHHHHHHHHH" + input_textview.getText().toString());
         bt1 = root.findViewById(R.id.transition_button);
         bt2 = root.findViewById(R.id.button_collection);
+        bt3 = root.findViewById(R.id.help);
+
         bt2.setOnClickListener(this);
         bt1.setOnClickListener(this);
+        bt3.setOnClickListener(this);
 
 //        dbHelper = new MydatabaseHelper(getActivity(), "Notebook.db", null, 1);
         optsql = new Optsql(getActivity(), "Notebook.db", null, 1);
@@ -78,7 +91,7 @@ public class TranslationFragment extends Fragment implements View.OnClickListene
                 getWordShowThread();
 
                 //如果单词存入了单词本，收藏On
-                if (optsql.selectValues(input_textview.getText().toString()) != null){
+                if (optsql.selectValues(input_textview.getText().toString()) != null) {
                     bt2.setBackgroundResource(R.drawable.star_on);
                     break;
                 }
@@ -94,12 +107,12 @@ public class TranslationFragment extends Fragment implements View.OnClickListene
             //收藏
             case R.id.button_collection:
                 //启动页无查询的时候 防止收藏
-                if (fanyi == "该词语未查询到翻译"||input_textview.getText().toString().equals(null)) {
+                if (fanyi == "该词语未查询到翻译" || input_textview.getText().toString().equals(null)) {
                     bt2.setBackgroundResource(R.drawable.star_off);
                     break;
                 }
                 //数据库存在该单词时防止收藏
-                if (optsql.selectValues(input_textview.getText().toString()) != null){
+                if (optsql.selectValues(input_textview.getText().toString()) != null) {
                     break;
                 }
 
@@ -109,6 +122,10 @@ public class TranslationFragment extends Fragment implements View.OnClickListene
                 fanyi = null;
                 phrase = null;
                 sentence = null;
+                break;
+
+            case R.id.help:
+                showTwo();
                 break;
         }
 
@@ -150,5 +167,25 @@ public class TranslationFragment extends Fragment implements View.OnClickListene
         });
     }
 
+    private void showTwo() {
 
+        builder = new AlertDialog.Builder(getContext()).setIcon(R.mipmap.ic_launcher).setTitle("帮助")
+                .setMessage("Wordnote的使用\n" +
+                        "支持英汉互译\n" +
+                        "支持收藏单词").setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //ToDo: 你想做的事情
+                        Toast.makeText(getContext(), "确定", Toast.LENGTH_LONG).show();
+                    }
+                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //ToDo: 你想做的事情
+                        Toast.makeText(getContext(), "关闭", Toast.LENGTH_LONG).show();
+                        dialogInterface.dismiss();
+                    }
+                });
+        builder.create().show();
+    }
 }
