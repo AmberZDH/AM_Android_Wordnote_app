@@ -35,6 +35,16 @@ public class DatabaseProvider extends ContentProvider {
         return true;
     }
 
+    /**
+     * 查询
+     *
+     * @param uri
+     * @param projection
+     * @param selection
+     * @param selectionArgs
+     * @param sortOrder
+     * @return
+     */
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
@@ -54,6 +64,12 @@ public class DatabaseProvider extends ContentProvider {
         return cursor;
     }
 
+    /**
+     * 获取类型
+     *
+     * @param uri
+     * @return
+     */
     @Nullable
     @Override
     public String getType(@NonNull Uri uri) {
@@ -66,6 +82,13 @@ public class DatabaseProvider extends ContentProvider {
         return null;
     }
 
+    /**
+     * 增
+     *
+     * @param uri
+     * @param contentValues
+     * @return
+     */
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
@@ -75,8 +98,8 @@ public class DatabaseProvider extends ContentProvider {
             case WORDNOTE_DIR:
                 break;
             case WORDNOTE_ITEM:
-                long newWord = db.insert("Book", null, contentValues);
-                uriReturn = Uri.parse("content://" + AUTHORITY + "/words/" + newWord);
+                long newWord = db.insert("Notebook", null, contentValues);
+                uriReturn = Uri.parse("content://" + AUTHORITY + "/word/" + newWord);
                 break;
 
         }
@@ -84,14 +107,57 @@ public class DatabaseProvider extends ContentProvider {
         return uriReturn;
     }
 
+    /**
+     * 删
+     *
+     * @param uri
+     * @param s
+     * @param strings
+     * @return
+     */
     @Override
     public int delete(@NonNull Uri uri, @Nullable String s, @Nullable String[] strings) {
-        return 0;
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        int deleteRows = 0;
+        switch (uriMatcher.match(uri)) {
+            case WORDNOTE_DIR:
+                deleteRows = db.delete("Notebook", s, strings);
+                break;
+            case WORDNOTE_ITEM:
+                String word = uri.getPathSegments().get(1);
+                deleteRows = db.delete("Notebook", "word=?", new String[]{word});
+                break;
+            default:
+                break;
+        }
+        return deleteRows;
     }
 
+    /**
+     * 更新
+     *
+     * @param uri
+     * @param contentValues
+     * @param s
+     * @param strings
+     * @return
+     */
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String s, @Nullable String[] strings) {
-        return 0;
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        int updateRows = 0;
+        switch (uriMatcher.match(uri)) {
+            case WORDNOTE_DIR:
+                updateRows = db.update("Notebook", contentValues, s, strings);
+                break;
+            case WORDNOTE_ITEM:
+                String word = uri.getPathSegments().get(1);
+                updateRows = db.update("Notebook", contentValues, "word=?", new String[]{word});
+                break;
+            default:
+                break;
+        }
+        return updateRows;
     }
 //    public static final int WORDS_DIR=0;
 //    public static final int WORDS_ITEM=1;
